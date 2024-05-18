@@ -36,17 +36,77 @@ var player = (function() {
         getPlayer2: getPlayer2,
         setPlayers: setPlayers,
     }
-})()
+})();
 
 var gameBoard = (function() {
     var gameBoardArray = [];
     
-});
+    function placePieceInArray (piece, position) {
+        gameBoardArray[position] = piece;
+    }
+
+    function checkPosition (position) {
+        if (gameBoardArray[position] == null)
+            {
+                return false;
+            }
+        else if (gameBoardArray[position] != null)
+            {
+                return true;
+            }
+    }
+
+    function printArray() {
+        let stringToPrint = "";
+
+        for(let i = 0; i < 3; i++)
+            {
+                if (gameBoardArray[i] == null)
+                    {
+                        stringToPrint += "[]";
+                    }
+                else
+                    {
+                        stringToPrint += "["+gameBoardArray[i]+"]";
+                    }  
+            }
+        console.log(stringToPrint);
+        stringToPrint = "";
+        for (let i = 3; i < 6; i++)
+            {
+                if (gameBoardArray[i] == null)
+                    {
+                        stringToPrint += "[]";
+                    }
+                else
+                    {
+                        stringToPrint += "["+gameBoardArray[i]+"]";
+                    }  
+            }
+        console.log(stringToPrint);
+        stringToPrint = "";
+        for (let i = 6; i < 9; i++)
+            {
+                if (gameBoardArray[i] == null)
+                    {
+                        stringToPrint += "[]";
+                    }
+                else
+                    {
+                        stringToPrint += "["+gameBoardArray[i]+"]";
+                    }  
+            }
+        console.log(stringToPrint);
+    }
+
+    return {
+        printArray: printArray,
+        checkPosition: checkPosition,
+        placePieceInArray: placePieceInArray,
+    }
+})();
 
 var gameLogic = (function() {
 
-});
-
-player.setPlayers();
-console.log(player.getPlayer1());
-console.log(player.getPlayer2());
+    
+})();

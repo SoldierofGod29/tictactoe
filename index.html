@@ -26,7 +26,7 @@
         </div>
         <div class="right-scoreboard">
             <h2 id="p1">P1</h2>
-            <h2 id="p2">P2</h2>
+            <h2 id="p2">CPU</h2>
             <div class="p1-score">
                 <p></p>
             </div>
@@ -36,8 +36,37 @@
         </div>
     </div>
     <dialog>
-        <form>
-            
+        <form method="dialog">
+            <div class="change-p1-name">
+                <label for="p1-name">Player 1's Initials:</label>
+                <input type="text" id="p1-name" min="1" max="3" placeholder="P1"/>
+            </div>
+            <div class="change-p1-marker">
+                <h2>Choose which Marker you wish to use.</h2>
+                <div class="X-marker-container">
+                    <label for="X-marker">X</label>
+                    <input type="radio" id="X-marker" value="X" name="markers" checked/>
+                </div>
+                <div class="O-marker-container">
+                    <label for="O-marker">O</label>
+                    <input type="radio" id="O-marker" name="markers" value="O"/>
+                </div>
+            </div>
+            <div class="choose-first-move">
+                <h2>Choose who goes first.</h2>
+                <div class="player1-container">
+                    <label for="player1">Player 1</label>
+                    <input type="radio" id="player1" name="first-move" checked/>
+                </div>
+                <div class="cpu-container">
+                    <label for="cpu">CPU</label>
+                    <input type="radio" id="cpu" name="first-move"/>
+                </div>
+            </div>
+            <div class="save-cancel-buttons">
+                <input type="submit" id="save-changes" value="Save Changes" />
+                <input type="submit" id="close-settings" value="Close Settings"/>
+            </div>
         </form>
     </dialog>
 

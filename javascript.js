@@ -40,7 +40,34 @@ var player = (function() {
 
 var gameBoard = (function() {
     var gameBoardArray = [];
+
+    let startButton = document.querySelector('#start');
+    let resetButton = document.querySelector('#reset');
+    let settingsButton = document.querySelector('#settings');
+
+    let markerSquares = document.querySelectorAll('.marker-spot');
+    let dialog = document.querySelector('dialog');
+
+    startButton.addEventListener('click', startGame);
+    resetButton.addEventListener('click', resetGame);
+    settingsButton.addEventListener('click', settingsDialog);
     
+    function startGame() {
+        markerSquares.forEach((button) => {
+            button.disabled = false;
+        });
+    }
+
+    function resetGame() {
+        markerSquares.forEach((button) => {
+            button.textContent = "";
+        });
+    }
+
+    function settingsDialog() {
+        dialog.showModal();
+    }
+
     function placePieceInArray (piece, position) {
         gameBoardArray[position] = piece;
     }
@@ -112,13 +139,7 @@ var gameBoard = (function() {
 })();
 
 var gameLogic = (function() {
-    let startButton = document.querySelector('#start');
-    let resetButton = document.querySelector('#reset');
-    let settingsButton = document.querySelector('#settings');
-
     let markerSquares = document.querySelectorAll('.marker-spot');
-
-    startButton.addEventListener('click', startGame);
 
     markerSquares.forEach((button) => {
         button.addEventListener('click', function() {
@@ -157,12 +178,6 @@ var gameLogic = (function() {
         });
     });
 
-    function startGame() {
-        markerSquares.forEach((button) => {
-            button.disabled = false;
-        });
-    }
-
     function getRandomNumber() {
         return Math.floor(Math.random() * 9);
     }
@@ -170,11 +185,11 @@ var gameLogic = (function() {
     function getUserInput(userInput) {
         if (gameBoard.checkPosition(userInput) == false)
             {
-                gameBoard.placePieceInArray('X', userInput)
+                gameBoard.placePieceInArray('', userInput)
             }
         else if (gameBoard.checkPosition(userInput) == true)
             {
-                alert("Position " + userInput + " has already been taken!");
+                alert("That position has already been taken!");
             } 
     }
 

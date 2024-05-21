@@ -30,7 +30,7 @@ body {
     background-color: black;
 }
 
-.left-scoreboard {
+.left-menu {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, 1fr);
@@ -40,11 +40,11 @@ body {
     border-image: url(./1000_F_77983707_0RAdJcXI2EyVIVb0KkaLlYmQ5JSrE4t5.jpg) 300;
 }
 
-.left-scoreboard > h3 {
+.left-menu > h3 {
     text-align: center;
     font-size: 60px;
     font-weight: bold;
-    align-self: end;
+    align-self: center;
     border: 6px solid transparent;
     border-left: 0px;
     border-right: 0px;
@@ -54,12 +54,12 @@ body {
     border-image: url(./1000_F_77983707_0RAdJcXI2EyVIVb0KkaLlYmQ5JSrE4t5.jpg) 350;
 }
 
-.left-scoreboard  > button {
+.left-menu > button {
     width: 220px;
     height: 120px;
     font-family: 'Eraser Dust', 'Times New Roman', Times, serif;
     justify-self: center;
-    align-self: center;
+    align-self: start;
     background-color: black;
     color: whitesmoke;
     font-size: 50px;

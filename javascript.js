@@ -112,22 +112,69 @@ var gameBoard = (function() {
 })();
 
 var gameLogic = (function() {
+    let startButton = document.querySelector('#start');
+    let resetButton = document.querySelector('#reset');
+    let settingsButton = document.querySelector('#settings');
+
+    let markerSquares = document.querySelectorAll('.marker-spot');
+
+    startButton.addEventListener('click', startGame);
+
+    markerSquares.forEach((button) => {
+        button.addEventListener('click', function() {
+            switch (button.id) {
+                case 'top-left':
+                    console.log("0")
+                    break;
+                case 'top-mid':
+                    getUserInput("1");
+                    break;
+                case 'top-right':
+                    getUserInput("2");
+                    break;
+                case 'mid-left':
+                    getUserInput("3");
+                    break;
+                case 'mid-mid':
+                    getUserInput("4");
+                    break;
+                case 'mid-right':
+                    getUserInput("5");
+                    break;
+                case 'bottom-left':
+                    getUserInput("6")
+                    break;
+                case 'bottom-mid':
+                    getUserInput("7");
+                    break;
+                case 'bottom-right':
+                    getUserInput("8");
+                    break;
+                default:
+                    console.log("you clicked something that isn't a square");
+                    break;
+            }
+        });
+    });
+
+    function startGame() {
+        markerSquares.forEach((button) => {
+            button.disabled = false;
+        });
+    }
 
     function getRandomNumber() {
         return Math.floor(Math.random() * 9);
     }
     
-    function getUserInput() {
-        let userInput = prompt("Choose a position 0-8");
-        
+    function getUserInput(userInput) {
         if (gameBoard.checkPosition(userInput) == false)
             {
-                return userInput;
+                gameBoard.placePieceInArray('X', userInput)
             }
         else if (gameBoard.checkPosition(userInput) == true)
             {
-                alert("Position "+userInput+" has already been taken!");
-                userInput = prompt("Choose a position 0-8");
+                alert("Position " + userInput + " has already been taken!");
             } 
     }
 
@@ -240,61 +287,4 @@ var gameLogic = (function() {
                     }
             }
     }
-
-    function playGame() {
-        player.setPlayers();
-        let i = 0;
-         while(i < 5)
-            {
-                gameBoard.placePieceInArray(player.getPlayer1(), getUserInput());
-                if (i != 4)
-                    {
-                        gameBoard.placePieceInArray(player.getPlayer2(), getComputerInput());
-                    }
-                
-
-                gameBoard.printArray();
-                console.log("-----------------");
-
-                if (winCondition() == "player1")
-                    {
-                        console.log("Player 1 wins!");
-                        break;
-                    }
-                else if (winCondition() == "player2")
-                    {
-                        console.log("Player 2 wins!");
-                        break;
-                    }
-
-                console.log(i);
-                if (i == 4)
-                    {
-                        if (winCondition() == "player1")
-                            {
-                                console.log("Player 1 wins!");
-                                break;
-                            }
-                        else if (winCondition() == "player2")
-                            {
-                                console.log("Player 2 wins!");
-                                break;
-                            }
-                        else 
-                            {
-                                console.log("It's a tie");
-                                break;
-                            }
-                    }
-                
-                        
-                i++;
-            }
-    }
-
-    return {
-        playGame: playGame,
-    }
 })();
-
-gameLogic.playGame();

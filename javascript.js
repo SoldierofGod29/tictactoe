@@ -4,9 +4,7 @@ var player = (function() {
     var player1 = "";
     var player2 = "";
 
-    function setPlayers() {
-        let userInput = prompt("X or O")
-
+    function setPlayers(userInput) {
         if (userInput == "X")
         {
             player1 = "X";
@@ -46,11 +44,14 @@ var gameBoard = (function() {
     let settingsButton = document.querySelector('#settings');
 
     let markerSquares = document.querySelectorAll('.marker-spot');
+
     let dialog = document.querySelector('dialog');
+    let closeButton = document.querySelector('#close-settings')
 
     startButton.addEventListener('click', startGame);
     resetButton.addEventListener('click', resetGame);
     settingsButton.addEventListener('click', settingsDialog);
+    closeButton.addEventListener('click', closeDialog)
     
     function startGame() {
         markerSquares.forEach((button) => {
@@ -62,14 +63,28 @@ var gameBoard = (function() {
         markerSquares.forEach((button) => {
             button.textContent = "";
         });
+
+        gameBoardArray.splice(0, gameBoardArray.length)
+
+        markerSquares.forEach((button) => {
+            button.disabled = true;
+        })
     }
 
     function settingsDialog() {
         dialog.showModal();
     }
 
+    function closeDialog() {
+        dialog.close();
+    }
+
     function placePieceInArray (piece, position) {
         gameBoardArray[position] = piece;
+    }
+
+    function placePieceInDom (piece, element) {
+        element.textContent = piece;
     }
 
     function getPosition (position) {
@@ -130,11 +145,26 @@ var gameBoard = (function() {
         console.log(stringToPrint);
     }
 
+    function returnArrayLength() {
+        let count = 0;
+
+        for (let i = 0; i < gameBoardArray.length; i++)
+            {
+                if (gameBoardArray[i] != null)
+                    {
+                        count++;
+                    }
+            }
+        return count;
+    }
+
     return {
         printArray: printArray,
         checkPosition: checkPosition,
         placePieceInArray: placePieceInArray,
-        getPosition: getPosition
+        getPosition: getPosition,
+        placePieceInDom: placePieceInDom,
+        returnArrayLength: returnArrayLength
     }
 })();
 
@@ -142,50 +172,18 @@ var gameLogic = (function() {
     let markerSquares = document.querySelectorAll('.marker-spot');
 
     markerSquares.forEach((button) => {
-        button.addEventListener('click', function() {
-            switch (button.id) {
-                case 'top-left':
-                    console.log("0")
-                    break;
-                case 'top-mid':
-                    getUserInput("1");
-                    break;
-                case 'top-right':
-                    getUserInput("2");
-                    break;
-                case 'mid-left':
-                    getUserInput("3");
-                    break;
-                case 'mid-mid':
-                    getUserInput("4");
-                    break;
-                case 'mid-right':
-                    getUserInput("5");
-                    break;
-                case 'bottom-left':
-                    getUserInput("6")
-                    break;
-                case 'bottom-mid':
-                    getUserInput("7");
-                    break;
-                case 'bottom-right':
-                    getUserInput("8");
-                    break;
-                default:
-                    console.log("you clicked something that isn't a square");
-                    break;
-            }
-        });
+        playGame(button);
     });
 
     function getRandomNumber() {
         return Math.floor(Math.random() * 9);
     }
     
-    function getUserInput(userInput) {
+    function getUserInput(userInput, element) {
         if (gameBoard.checkPosition(userInput) == false)
             {
-                gameBoard.placePieceInArray('', userInput)
+                gameBoard.placePieceInArray('X', userInput);
+                gameBoard.placePieceInDom('X', element);
             }
         else if (gameBoard.checkPosition(userInput) == true)
             {
@@ -302,4 +300,116 @@ var gameLogic = (function() {
                     }
             }
     }
+
+    function playGame(button) {
+        player.setPlayers('X');
+
+        button.addEventListener('click', () => {
+            switch (button.id) 
+            {
+                case 'top-left':
+                    getUserInput("0", button)
+                    break;
+                case 'top-mid':
+                    getUserInput("1", button);
+                    break;
+                case 'top-right':
+                    getUserInput("2", button);
+                    break;
+                case 'mid-left':
+                    getUserInput("3", button);
+                    break;
+                case 'mid-mid':
+                    getUserInput("4", button);
+                    break;
+                case 'mid-right':
+                    getUserInput("5", button);
+                    break;
+                case 'bottom-left':
+                    getUserInput("6", button)
+                    break;
+                case 'bottom-mid':
+                    getUserInput("7", button);
+                    break;
+                case 'bottom-right':
+                    getUserInput("8", button);
+                    break;
+                default:
+                    console.log("you clicked something that isn't a square");
+                    break;
+            }
+            console.log(winCondition());
+            if (winCondition() == 'player1')
+                {
+                    alert("Player 1 wins!");
+                }
+            else if (winCondition() == 'player2')
+                {
+                    alert("You Lost!");
+                }
+
+            console.log(gameBoard.returnArrayLength());
+            if (gameBoard.returnArrayLength() < 8)
+                {
+                    let element = ""; 
+
+                    switch(getComputerInput())
+                    {
+                        case 0:
+                            element = document.querySelector('#top-left');
+                            gameBoard.placePieceInArray('O', 0);
+                            gameBoard.placePieceInDom('O', element);
+                            break;
+                        case 1: 
+                            element = document.querySelector('#top-mid');
+                            gameBoard.placePieceInArray('O', 1);
+                            gameBoard.placePieceInDom("O", element);
+                            break;
+                        case 2: 
+                            element = document.querySelector('#top-right');
+                            gameBoard.placePieceInArray('O', 2);
+                            gameBoard.placePieceInDom("O", element);
+                            break;
+                        case 3: 
+                            element = document.querySelector('#mid-left');
+                            gameBoard.placePieceInArray('O', 3);
+                            gameBoard.placePieceInDom("O", element);
+                            break;
+                        case 4: 
+                            element = document.querySelector('#mid-mid');
+                            gameBoard.placePieceInArray('O', 4);
+                            gameBoard.placePieceInDom("O", element);
+                            break;
+                        case 5: 
+                            element = document.querySelector('#mid-right');
+                            gameBoard.placePieceInArray('O', 5);
+                            gameBoard.placePieceInDom("O", element);
+                            break;
+                        case 6: 
+                            element = document.querySelector('#bottom-left');
+                            gameBoard.placePieceInArray('O', 6);
+                            gameBoard.placePieceInDom("O", element);
+                            break;
+                        case 7: 
+                            element = document.querySelector('#bottom-mid');
+                            gameBoard.placePieceInArray('O', 7);
+                            gameBoard.placePieceInDom("O", element);
+                            break;
+                        case 8: 
+                            element = document.querySelector('#bottom-right');
+                            gameBoard.placePieceInArray('O', 8);
+                            gameBoard.placePieceInDom("O", element);
+                            break;
+                        default:
+                            console.log("the computer got a number outside of 0-8");
+                            break;
+                    }
+                }
+            else if (gameBoard.returnArrayLength() == 9)
+                {
+                    alert("It's a tie!");
+                    //gameBoard.resetGame();
+                }
+        });
+    } 
 })();

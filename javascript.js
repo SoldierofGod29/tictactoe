@@ -39,11 +39,16 @@ var player = (function() {
 var gameBoard = (function() {
     var gameBoardArray = [];
 
+    var playerOneScore = 0;
+    var computerScore = 0;
+
     let startButton = document.querySelector('#start');
     let resetButton = document.querySelector('#reset');
     let settingsButton = document.querySelector('#settings');
 
     let markerSquares = document.querySelectorAll('.marker-spot');
+    let scorePlayerMenu = document.querySelector('.p1-score > p');
+    let scoreComputerMenu = document.querySelector('.p2-score > p');
 
     let dialog = document.querySelector('dialog');
     let closeButton = document.querySelector('#close-settings')
@@ -59,12 +64,28 @@ var gameBoard = (function() {
         });
     }
 
+    function setPlayerScore() {
+        playerOneScore++;
+    }
+
+    function setComputerScore() {
+        computerScore++;
+    }
+
+    function getPlayerScore() {
+        return playerOneScore;
+    }
+
+    function getComputerScore() {
+        return computerScore;
+    }
+
     function resetGame() {
         markerSquares.forEach((button) => {
             button.textContent = "";
         });
 
-        gameBoardArray.splice(0, gameBoardArray.length)
+        gameBoardArray.splice(0, gameBoardArray.length);
 
         markerSquares.forEach((button) => {
             button.disabled = true;
@@ -83,8 +104,65 @@ var gameBoard = (function() {
         gameBoardArray[position] = piece;
     }
 
-    function placePieceInDom (piece, element) {
-        element.textContent = piece;
+    function printDom () {
+        for(let i = 0; i < gameBoardArray.length; i++)
+            {
+                switch(i)
+                {
+                    case 0:
+                        document.querySelector('#top-left').textContent = gameBoardArray[0];
+                        break;
+                    case 1:
+                        document.querySelector('#top-mid').textContent = gameBoardArray[1];
+                        break;
+                    case 2:
+                        document.querySelector('#top-right').textContent = gameBoardArray[2];
+                        break;
+                    case 3:
+                        document.querySelector('#mid-left').textContent = gameBoardArray[3];
+                        break;
+                    case 4:
+                        document.querySelector('#mid-mid').textContent = gameBoardArray[4];
+                        break;
+                    case 5:
+                        document.querySelector('#mid-right').textContent = gameBoardArray[5];
+                        break;
+                    case 6:
+                        document.querySelector('#bottom-left').textContent = gameBoardArray[6];
+                        break;
+                    case 7:
+                        document.querySelector('#bottom-mid').textContent = gameBoardArray[7];
+                        break;
+                    case 8:
+                        document.querySelector('#bottom-right').textContent = gameBoardArray[8];
+                        break;
+                    default:
+                        console.log("nothing happened");
+                        break;
+                }
+            }
+        
+        scorePlayerMenu.textContent = "";
+        scoreComputerMenu.textContent = "";
+
+        for (let i = 0; i < getPlayerScore(); i++)
+            {
+                if (i == 5)
+                    {
+                        scorePlayerMenu.textContent = scorePlayerMenu.textContent + " ";
+                    }
+
+                scorePlayerMenu.textContent = scorePlayerMenu.textContent + "i";
+            }
+        for (let j = 0; j < getComputerScore(); j++)
+            {
+                if (j == 5)
+                    {
+                        scoreComputerMenu.textContent = scoreComputerMenu.textContent + " ";
+                    }
+                        
+                scoreComputerMenu.textContent = scoreComputerMenu.textContent + "i";
+            }
     }
 
     function getPosition (position) {
@@ -102,49 +180,6 @@ var gameBoard = (function() {
             }
     }
 
-    function printArray() {
-        let stringToPrint = "";
-
-        for(let i = 0; i < 3; i++)
-            {
-                if (gameBoardArray[i] == null)
-                    {
-                        stringToPrint += "[]";
-                    }
-                else
-                    {
-                        stringToPrint += "["+gameBoardArray[i]+"]";
-                    }  
-            }
-        console.log(stringToPrint);
-        stringToPrint = "";
-        for (let i = 3; i < 6; i++)
-            {
-                if (gameBoardArray[i] == null)
-                    {
-                        stringToPrint += "[]";
-                    }
-                else
-                    {
-                        stringToPrint += "["+gameBoardArray[i]+"]";
-                    }  
-            }
-        console.log(stringToPrint);
-        stringToPrint = "";
-        for (let i = 6; i < 9; i++)
-            {
-                if (gameBoardArray[i] == null)
-                    {
-                        stringToPrint += "[]";
-                    }
-                else
-                    {
-                        stringToPrint += "["+gameBoardArray[i]+"]";
-                    }  
-            }
-        console.log(stringToPrint);
-    }
-
     function returnArrayLength() {
         let count = 0;
 
@@ -159,12 +194,16 @@ var gameBoard = (function() {
     }
 
     return {
-        printArray: printArray,
+        setPlayerScore: setPlayerScore,
+        setComputerScore: setComputerScore,
+        getPlayerScore: getPlayerScore,
+        getComputerScore: getComputerScore,
         checkPosition: checkPosition,
         placePieceInArray: placePieceInArray,
         getPosition: getPosition,
-        placePieceInDom: placePieceInDom,
-        returnArrayLength: returnArrayLength
+        printDom: printDom,
+        returnArrayLength: returnArrayLength,
+        resetGame: resetGame
     }
 })();
 
@@ -179,11 +218,10 @@ var gameLogic = (function() {
         return Math.floor(Math.random() * 9);
     }
     
-    function getUserInput(userInput, element) {
+    function getUserInput(userInput) {
         if (gameBoard.checkPosition(userInput) == false)
             {
                 gameBoard.placePieceInArray('X', userInput);
-                gameBoard.placePieceInDom('X', element);
             }
         else if (gameBoard.checkPosition(userInput) == true)
             {
@@ -308,107 +346,118 @@ var gameLogic = (function() {
             switch (button.id) 
             {
                 case 'top-left':
-                    getUserInput("0", button)
+                    getUserInput("0")
                     break;
                 case 'top-mid':
-                    getUserInput("1", button);
+                    getUserInput("1");
                     break;
                 case 'top-right':
-                    getUserInput("2", button);
+                    getUserInput("2");
                     break;
                 case 'mid-left':
-                    getUserInput("3", button);
+                    getUserInput("3");
                     break;
                 case 'mid-mid':
-                    getUserInput("4", button);
+                    getUserInput("4");
                     break;
                 case 'mid-right':
-                    getUserInput("5", button);
+                    getUserInput("5");
                     break;
                 case 'bottom-left':
-                    getUserInput("6", button)
+                    getUserInput("6")
                     break;
                 case 'bottom-mid':
-                    getUserInput("7", button);
+                    getUserInput("7");
                     break;
                 case 'bottom-right':
-                    getUserInput("8", button);
+                    getUserInput("8");
                     break;
                 default:
                     console.log("you clicked something that isn't a square");
                     break;
             }
-            console.log(winCondition());
-            if (winCondition() == 'player1')
-                {
-                    alert("Player 1 wins!");
-                }
-            else if (winCondition() == 'player2')
-                {
-                    alert("You Lost!");
-                }
 
-            console.log(gameBoard.returnArrayLength());
             if (gameBoard.returnArrayLength() < 8)
                 {
-                    let element = ""; 
-
                     switch(getComputerInput())
                     {
                         case 0:
-                            element = document.querySelector('#top-left');
                             gameBoard.placePieceInArray('O', 0);
-                            gameBoard.placePieceInDom('O', element);
                             break;
                         case 1: 
-                            element = document.querySelector('#top-mid');
                             gameBoard.placePieceInArray('O', 1);
-                            gameBoard.placePieceInDom("O", element);
                             break;
                         case 2: 
-                            element = document.querySelector('#top-right');
                             gameBoard.placePieceInArray('O', 2);
-                            gameBoard.placePieceInDom("O", element);
                             break;
                         case 3: 
-                            element = document.querySelector('#mid-left');
                             gameBoard.placePieceInArray('O', 3);
-                            gameBoard.placePieceInDom("O", element);
                             break;
                         case 4: 
-                            element = document.querySelector('#mid-mid');
                             gameBoard.placePieceInArray('O', 4);
-                            gameBoard.placePieceInDom("O", element);
                             break;
                         case 5: 
-                            element = document.querySelector('#mid-right');
                             gameBoard.placePieceInArray('O', 5);
-                            gameBoard.placePieceInDom("O", element);
                             break;
                         case 6: 
-                            element = document.querySelector('#bottom-left');
                             gameBoard.placePieceInArray('O', 6);
-                            gameBoard.placePieceInDom("O", element);
                             break;
                         case 7: 
-                            element = document.querySelector('#bottom-mid');
                             gameBoard.placePieceInArray('O', 7);
-                            gameBoard.placePieceInDom("O", element);
                             break;
                         case 8: 
-                            element = document.querySelector('#bottom-right');
                             gameBoard.placePieceInArray('O', 8);
-                            gameBoard.placePieceInDom("O", element);
                             break;
                         default:
                             console.log("the computer got a number outside of 0-8");
                             break;
                     }
                 }
+            console.log(gameBoard.getPlayerScore());
+            if (winCondition() == 'player1')
+                {
+                    gameBoard.setPlayerScore();
+
+                    gameBoard.printDom();
+                    
+                    markerSquares.forEach((button) => {
+                        button.disabled = true;
+                    });
+
+                    setTimeout(function() {
+                        alert("Player 1 wins!");
+                    }, 200);                    
+                }
+            else if (winCondition() == 'player2')
+                {
+                    gameBoard.setComputerScore();
+
+                    gameBoard.printDom();
+                    
+                    markerSquares.forEach((button) => {
+                        button.disabled = true;
+                    });
+
+                    setTimeout(function() {
+                        alert("Player 2 wins!");
+                    }, 200);
+
+                }
             else if (gameBoard.returnArrayLength() == 9)
                 {
-                    alert("It's a tie!");
-                    //gameBoard.resetGame();
+                    gameBoard.printDom();
+
+                    markerSquares.forEach((button) => {
+                        button.disabled = true;
+                    });
+
+                    setTimeout(function() {
+                        alert("It's a tie!");
+                    }, 200);
+                }
+            else
+                {
+                    gameBoard.printDom();
                 }
         });
     } 

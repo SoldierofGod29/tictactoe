@@ -37,30 +37,48 @@
     </div>
     <dialog>
         <form method="dialog">
-            <div class="change-p1-name">
-                <label for="p1-name">Player 1's Initials:</label>
-                <input type="text" id="p1-name" min="1" max="3" placeholder="P1"/>
+            <h2>Settings</h2>
+            <div class="change-name">
+                <h2>Change Players Name:</h2>
+                <div class="name-change-container">
+                    <div class="p1-name-container">
+                        <label for="p1-name">Player 1's Name:</label>
+                        <input type="text" id="p1-name" min="1" placeholder="P1"/>
+                    </div>
+                    <div class="cpu-name-container">
+                        <label for="cpu-name">Cpu's Name:</label>
+                        <input type="text" id="cpu-name" min="1" placeholder="CPU"/>
+                    </div>
+                </div>
             </div>
             <div class="change-p1-marker">
-                <h2>Choose which Marker you wish to use.</h2>
-                <div class="X-marker-container">
-                    <label for="X-marker">X</label>
-                    <input type="radio" id="X-marker" value="X" name="markers" checked/>
-                </div>
-                <div class="O-marker-container">
-                    <label for="O-marker">O</label>
-                    <input type="radio" id="O-marker" name="markers" value="O"/>
+                <h2>Choose your Marker:</h2>
+                <div class="marker-containers">
+                    <div class="X-marker-container">
+                        <label for="X-marker">X</label>
+                        <input type="radio" id="X-marker" value="X" name="markers" checked/>
+                        <span class="x-marker-border"></span>
+                    </div>
+                    <div class="O-marker-container">
+                        <label for="O-marker">O</label>
+                        <input type="radio" id="O-marker" name="markers" value="O"/>
+                        <span class="o-marker-border"></span>
+                    </div>
                 </div>
             </div>
             <div class="choose-first-move">
-                <h2>Choose who goes first.</h2>
-                <div class="player1-container">
-                    <label for="player1">Player 1</label>
-                    <input type="radio" id="player1" name="first-move" checked/>
-                </div>
-                <div class="cpu-container">
-                    <label for="cpu">CPU</label>
-                    <input type="radio" id="cpu" name="first-move"/>
+                <h2>Choose who goes first:</h2>
+                <div class="players-move-container">
+                    <div class="player1-container">
+                        <label for="player1">Player 1</label>
+                        <input type="radio" id="player1" name="first-move" checked/>
+                        <span class="player1-border"></span>
+                    </div>
+                    <div class="cpu-container">
+                        <label for="cpu">CPU</label>
+                        <input type="radio" id="cpu" name="first-move"/>
+                        <span class="cpu-border"></span>
+                    </div>
                 </div>
             </div>
             <div class="save-cancel-buttons">

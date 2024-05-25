@@ -1,38 +1,85 @@
 //JavaScript Code for Tic Tac Toe Project
 
 var player = (function() {
-    var player1 = "";
-    var player2 = "";
+    var dialogPlayer1Name = "P1";
+    var dialogPlayer2Name = "CPU";
+    var dialogMarker = "X";
+    var dialogFirstMove = "player1";
 
-    function setPlayers(userInput) {
-        if (userInput == "X")
-        {
-            player1 = "X";
-            player2 = "O";
-        }
-        else if (userInput == "O")
-        {
-            player1 = "O";
-            player2 = "X";
-        }
+    let dialog = document.querySelector('dialog');
+
+    let settingsButton = document.querySelector('#settings');
+    let saveButton = document.querySelector('#save-changes');
+    let closeButton = document.querySelector('#close-settings');
+
+    settingsButton.addEventListener('click', settingsDialog);
+    saveButton.addEventListener('click', saveChangesDialog);
+    closeButton.addEventListener('click', closeDialog);
+
+    function settingsDialog() {
+        dialog.showModal();
+    }
+
+    function saveChangesDialog() {
+        let radioMarkers = document.querySelector('input[name = "markers"]:checked');
+        let radioFirstMove = document.querySelector('input[name = "first-move"]:checked');
+
+        dialogPlayer1Name = document.querySelector('#p1-name');
+        dialogPlayer2Name = document.querySelector('#cpu-name');
+
+        if (radioMarkers != null)
+            {
+                dialogMarker = radioMarkers.value;
+            }
+        if (radioFirstMove != null)
+            {
+                dialogFirstMove = radioFirstMove.value;
+            }
+
+        
+    }
+
+    function closeDialog() {
+        dialog.close();
+    }
+
+    function getPlayer1Marker() {
+        if (dialogMarker != null)
+            {
+                return dialogMarker;
+            }
+    }
+
+    function getPlayer2Marker() {
+        if (dialogMarker == 'X' && dialogMarker != null)
+            {
+                return 'O';
+            }
+        else if (dialogMarker == 'O' && dialogMarker != null)
+            {
+                return 'X';
+            }
         else
-        {
-            userInput = prompt("X or O");
-        }
+            {
+                return 'O';
+            }
     }
 
-    function getPlayer1() {
-        return player1;
-    }
-
-    function getPlayer2(){
-        return player2;
+    function getFirstToMove () {
+        if (dialogFirstMove != null)
+            {
+                return dialogFirstMove;
+            }
+        else 
+            {
+                return 'player1';
+            }
     }
 
     return {
-        getPlayer1: getPlayer1,
-        getPlayer2: getPlayer2,
-        setPlayers: setPlayers,
+        getPlayer1Marker: getPlayer1Marker,
+        getPlayer2Marker: getPlayer2Marker,
+        getFirstToMove: getFirstToMove
     }
 })();
 
@@ -44,19 +91,14 @@ var gameBoard = (function() {
 
     let startButton = document.querySelector('#start');
     let resetButton = document.querySelector('#reset');
-    let settingsButton = document.querySelector('#settings');
 
     let markerSquares = document.querySelectorAll('.marker-spot');
     let scorePlayerMenu = document.querySelector('.p1-score > p');
     let scoreComputerMenu = document.querySelector('.p2-score > p');
 
-    let dialog = document.querySelector('dialog');
-    let closeButton = document.querySelector('#close-settings')
-
     startButton.addEventListener('click', startGame);
     resetButton.addEventListener('click', resetGame);
-    settingsButton.addEventListener('click', settingsDialog);
-    closeButton.addEventListener('click', closeDialog)
+    
     
     function startGame() {
         markerSquares.forEach((button) => {
@@ -90,14 +132,6 @@ var gameBoard = (function() {
         markerSquares.forEach((button) => {
             button.disabled = true;
         })
-    }
-
-    function settingsDialog() {
-        dialog.showModal();
-    }
-
-    function closeDialog() {
-        dialog.close();
     }
 
     function placePieceInArray (piece, position) {
@@ -221,7 +255,7 @@ var gameLogic = (function() {
     function getUserInput(userInput) {
         if (gameBoard.checkPosition(userInput) == false)
             {
-                gameBoard.placePieceInArray('X', userInput);
+                gameBoard.placePieceInArray(player.getPlayer1Marker(), userInput);
             }
         else if (gameBoard.checkPosition(userInput) == true)
             {
@@ -340,7 +374,6 @@ var gameLogic = (function() {
     }
 
     function playGame(button) {
-        player.setPlayers('X');
 
         button.addEventListener('click', () => {
             switch (button.id) 
@@ -382,38 +415,38 @@ var gameLogic = (function() {
                     switch(getComputerInput())
                     {
                         case 0:
-                            gameBoard.placePieceInArray('O', 0);
+                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 0);
                             break;
                         case 1: 
-                            gameBoard.placePieceInArray('O', 1);
+                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 1);
                             break;
                         case 2: 
-                            gameBoard.placePieceInArray('O', 2);
+                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 2);
                             break;
                         case 3: 
-                            gameBoard.placePieceInArray('O', 3);
+                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 3);
                             break;
                         case 4: 
-                            gameBoard.placePieceInArray('O', 4);
+                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 4);
                             break;
                         case 5: 
-                            gameBoard.placePieceInArray('O', 5);
+                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 5);
                             break;
                         case 6: 
-                            gameBoard.placePieceInArray('O', 6);
+                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 6);
                             break;
                         case 7: 
-                            gameBoard.placePieceInArray('O', 7);
+                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 7);
                             break;
                         case 8: 
-                            gameBoard.placePieceInArray('O', 8);
+                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 8);
                             break;
                         default:
                             console.log("the computer got a number outside of 0-8");
                             break;
                     }
                 }
-            console.log(gameBoard.getPlayerScore());
+
             if (winCondition() == 'player1')
                 {
                     gameBoard.setPlayerScore();

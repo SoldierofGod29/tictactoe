@@ -34,9 +34,7 @@ var player = (function() {
         if (radioFirstMove != null)
             {
                 dialogFirstMove = radioFirstMove.value;
-            }
-
-        
+            }  
     }
 
     function closeDialog() {
@@ -68,11 +66,8 @@ var player = (function() {
     function getFirstToMove () {
         if (dialogFirstMove != null)
             {
+                console.log(dialogFirstMove);
                 return dialogFirstMove;
-            }
-        else 
-            {
-                return 'player1';
             }
     }
 
@@ -283,11 +278,11 @@ var gameLogic = (function() {
     function winCondition() {
         if ((gameBoard.getPosition(0) == gameBoard.getPosition(1) && gameBoard.getPosition(0) == gameBoard.getPosition(2)) && gameBoard.getPosition(0) != null)
             {
-                if (player.getPlayer1() == gameBoard.getPosition(0))
+                if (player.getPlayer1Marker() == gameBoard.getPosition(0))
                     {
                         return "player1";
                     }
-                else if (player.getPlayer2() == gameBoard.getPosition(0))
+                else if (player.getPlayer2Marker() == gameBoard.getPosition(0))
                     {
                         return "player2";
                     }
@@ -295,33 +290,33 @@ var gameLogic = (function() {
 
         else if ((gameBoard.getPosition(0) == gameBoard.getPosition(3) && gameBoard.getPosition(0) == gameBoard.getPosition(6)) && gameBoard.getPosition(0) != null)
             {
-                if (player.getPlayer1() == gameBoard.getPosition(0))
+                if (player.getPlayer1Marker() == gameBoard.getPosition(0))
                     {
                         return "player1";
                     }
-                else if (player.getPlayer2() == gameBoard.getPosition(0))
+                else if (player.getPlayer2Marker() == gameBoard.getPosition(0))
                     {
                         return "player2";
                     }
             }
         else if ((gameBoard.getPosition(0) == gameBoard.getPosition(4) && gameBoard.getPosition(0) == gameBoard.getPosition(8)) && gameBoard.getPosition(0) != null)
             {
-                if (player.getPlayer1() == gameBoard.getPosition(0))
+                if (player.getPlayer1Marker() == gameBoard.getPosition(0))
                     {
                         return "player1";
                     }
-                else if (player.getPlayer2() == gameBoard.getPosition(0))
+                else if (player.getPlayer2Marker() == gameBoard.getPosition(0))
                     {
                         return "player2";
                     }
             }
         else if ((gameBoard.getPosition(1) == gameBoard.getPosition(4) && gameBoard.getPosition(1) == gameBoard.getPosition(7)) && gameBoard.getPosition(1) != null)
             {
-                if (player.getPlayer1() == gameBoard.getPosition(1))
+                if (player.getPlayer1Marker() == gameBoard.getPosition(1))
                     {
                         return "player1";
                     }
-                else if (player.getPlayer2() == gameBoard.getPosition(1))
+                else if (player.getPlayer2Marker() == gameBoard.getPosition(1))
                     {
                         return "player2";
                     }
@@ -329,52 +324,51 @@ var gameLogic = (function() {
 
         else if ((gameBoard.getPosition(2) == gameBoard.getPosition(4) && gameBoard.getPosition(2) == gameBoard.getPosition(6)) && gameBoard.getPosition(2) != null)
             {
-                if (player.getPlayer1() == gameBoard.getPosition(2))
+                if (player.getPlayer1Marker() == gameBoard.getPosition(2))
                     {
                         return "player1";
                     }
-                else if (player.getPlayer2() == gameBoard.getPosition(2))
+                else if (player.getPlayer2Marker() == gameBoard.getPosition(2))
                     {
                         return "player2";
                     }
             }
         else if ((gameBoard.getPosition(2) == gameBoard.getPosition(5) && gameBoard.getPosition(2) == gameBoard.getPosition(8)) && gameBoard.getPosition(2) != null)
             {
-                if (player.getPlayer1() == gameBoard.getPosition(2))
+                if (player.getPlayer1Marker() == gameBoard.getPosition(2))
                     {
                         return "player1";
                     }
-                else if (player.getPlayer2() == gameBoard.getPosition(2))
+                else if (player.getPlayer2Marker() == gameBoard.getPosition(2))
                     {
                         return "player2";
                     }
             }
         else if ((gameBoard.getPosition(3) == gameBoard.getPosition(4) && gameBoard.getPosition(3) == gameBoard.getPosition(5)) && gameBoard.getPosition(3) != null)
             {
-                if (player.getPlayer1() == gameBoard.getPosition(3))
+                if (player.getPlayer1Marker() == gameBoard.getPosition(3))
                     {
                         return "player1";
                     }
-                else if (player.getPlayer2() == gameBoard.getPosition(3))
+                else if (player.getPlayer2Marker() == gameBoard.getPosition(3))
                     {
                         return "player2";
                     }
             }
         else if ((gameBoard.getPosition(6) == gameBoard.getPosition(7) && gameBoard.getPosition(6) == gameBoard.getPosition(8)) && gameBoard.getPosition(6) != null)
             {
-                if (player.getPlayer1() == gameBoard.getPosition(6))
+                if (player.getPlayer1Marker() == gameBoard.getPosition(6))
                     {
                         return "player1";
                     }
-                else if (player.getPlayer2() == gameBoard.getPosition(6))
+                else if (player.getPlayer2Marker() == gameBoard.getPosition(6))
                     {
                         return "player2";
                     }
             }
     }
 
-    function playGame(button) {
-
+    function playerMovesFirst(button) {
         button.addEventListener('click', () => {
             switch (button.id) 
             {
@@ -409,6 +403,8 @@ var gameLogic = (function() {
                     console.log("you clicked something that isn't a square");
                     break;
             }
+
+            player.getFirstToMove()
 
             if (gameBoard.returnArrayLength() < 8)
                 {
@@ -493,5 +489,21 @@ var gameLogic = (function() {
                     gameBoard.printDom();
                 }
         });
+    }
+
+    function playGame(button) {
+        console.log(player.getFirstToMove());
+        if (player.getFirstToMove() == "player1")
+            {
+                playerMovesFirst(button);
+            }
+        else 
+            {
+                console.log("cpu");
+            }
     } 
+
+    return {
+        playGame: playGame
+    }
 })();

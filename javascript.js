@@ -73,11 +73,25 @@ var player = (function() {
     }
 
     function getPlayerName() {
-        return dialogPlayer1Name.value;
+        if (dialogPlayer1Name.value == "" || dialogPlayer1Name == "P1")
+            {
+                return "P1";
+            }
+        else
+            {
+                return dialogPlayer1Name.value;
+            }
     }
 
     function getCpuName() {
-        return dialogPlayer2Name.value;
+        if (dialogPlayer2Name.value == "" || dialogPlayer2Name == "CPU")
+            {
+                return "CPU";
+            }
+        else
+            {
+                return dialogPlayer2Name.value;
+            }
     }
 
     return {
@@ -259,6 +273,13 @@ var gameLogic = (function() {
                         console.log("spot taken");
                     }
             }
+        if (player.getFirstToMove() == 'cpu'&& gameBoard.returnArrayLength() == 8)
+            {
+                while(getComputerInput() == true)
+                    {
+                        console.log("spot taken");
+                    }
+            }
 
         if(winCondition() == 'player1')
             {
@@ -313,7 +334,11 @@ var gameLogic = (function() {
         markerSquares.forEach((button) => {
             button.disabled = false;
         });
-        
+        if (player.getFirstToMove() == 'cpu')
+            {
+                getComputerInput();
+                gameBoard.printDom();
+            }
     }
 
     function getRandomNumber() {

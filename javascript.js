@@ -66,7 +66,6 @@ var player = (function() {
     function getFirstToMove () {
         if (dialogFirstMove != null)
             {
-                console.log(dialogFirstMove);
                 return dialogFirstMove;
             }
     }
@@ -87,18 +86,20 @@ var gameBoard = (function() {
     let startButton = document.querySelector('#start');
     let resetButton = document.querySelector('#reset');
 
-    let markerSquares = document.querySelectorAll('.marker-spot');
     let scorePlayerMenu = document.querySelector('.p1-score > p');
     let scoreComputerMenu = document.querySelector('.p2-score > p');
 
     startButton.addEventListener('click', startGame);
     resetButton.addEventListener('click', resetGame);
-    
-    
+
     function startGame() {
-        markerSquares.forEach((button) => {
-            button.disabled = false;
-        });
+        gameLogic.startGame();
+        startButton.disabled = true;
+    }
+
+    function resetGame() {
+        gameLogic.resetGame(gameBoardArray);
+        startButton.disabled = false;
     }
 
     function setPlayerScore() {
@@ -115,18 +116,6 @@ var gameBoard = (function() {
 
     function getComputerScore() {
         return computerScore;
-    }
-
-    function resetGame() {
-        markerSquares.forEach((button) => {
-            button.textContent = "";
-        });
-
-        gameBoardArray.splice(0, gameBoardArray.length);
-
-        markerSquares.forEach((button) => {
-            button.disabled = true;
-        })
     }
 
     function placePieceInArray (piece, position) {
@@ -239,42 +228,171 @@ var gameBoard = (function() {
 var gameLogic = (function() {
     let markerSquares = document.querySelectorAll('.marker-spot');
 
-    markerSquares.forEach((button) => {
-        playGame(button);
+    markerSquares.forEach((button, key) => {
+        button.addEventListener('click', () => {
+            playGame(key);
+        })
     });
+
+    function playGame(key) {
+        if (getUserInput(key) != true && gameBoard.returnArrayLength() <= 7)
+            {
+                while(getComputerInput() == true)
+                    {
+                        console.log("spot taken");
+                    }
+            }
+
+        if(winCondition() == 'player1')
+            {
+                markerSquares.forEach((buttons) => {
+                    buttons.disabled = true;
+                })
+                gameBoard.setPlayerScore();
+                gameBoard.printDom();
+                setTimeout(() => {
+                    alert("Player 1 wins!");
+                }, '500')
+            }
+        else if (winCondition() == 'player2')
+            {
+                markerSquares.forEach((buttons) => {
+                    buttons.disabled = true;
+                })
+                gameBoard.setComputerScore();
+                gameBoard.printDom();
+                setTimeout(() => {
+                    alert("Player 2 wins!");
+                }, '500')
+            }
+        else if (gameBoard.returnArrayLength() == 9)
+            {
+                markerSquares.forEach((buttons) => {
+                    buttons.disabled = true;
+                })
+                setTimeout(() => {
+                    alert("It's a tie!");
+                }, '500')
+            }
+        else
+        {
+            gameBoard.printDom();
+        }
+    }
+
+    function resetGame(array) {
+        markerSquares.forEach((button) => {
+            button.textContent = "";
+        });
+
+        array.splice(0, array.length);
+
+        markerSquares.forEach((button) => {
+            button.disabled = true;
+        })
+    }
+
+    function startGame() {
+        markerSquares.forEach((button) => {
+            button.disabled = false;
+        });
+        
+    }
 
     function getRandomNumber() {
         return Math.floor(Math.random() * 9);
     }
     
     function getUserInput(userInput) {
-        if (gameBoard.checkPosition(userInput) == false)
+        if (gameBoard.checkPosition(userInput) != true)
             {
-                gameBoard.placePieceInArray(player.getPlayer1Marker(), userInput);
+                switch (userInput)
+                {
+                    case 0: 
+                        gameBoard.placePieceInArray(player.getPlayer1Marker(), 0);
+                        break;
+                    case 1: 
+                        gameBoard.placePieceInArray(player.getPlayer1Marker(), 1);
+                        break;
+                    case 2:
+                        gameBoard.placePieceInArray(player.getPlayer1Marker(), 2);
+                        break;
+                    case 3:
+                        gameBoard.placePieceInArray(player.getPlayer1Marker(), 3);
+                        break;
+                    case 4:
+                        gameBoard.placePieceInArray(player.getPlayer1Marker(), 4);
+                        break;
+                    case 5:
+                        gameBoard.placePieceInArray(player.getPlayer1Marker(), 5);
+                        break;
+                    case 6:
+                        gameBoard.placePieceInArray(player.getPlayer1Marker(), 6);
+                        break;
+                    case 7:
+                        gameBoard.placePieceInArray(player.getPlayer1Marker(), 7);
+                        break;
+                    case 8:
+                        gameBoard.placePieceInArray(player.getPlayer1Marker(), 8);
+                        break;
+                    default:
+                        console.log("Something went wrong with user input.")
+                        break;
+                }
             }
         else if (gameBoard.checkPosition(userInput) == true)
             {
-                alert("That position has already been taken!");
-            } 
+                alert("That position is already taken! Choose another spot.");
+                return true;
+            }
+        
     }
 
     function getComputerInput() {
         let computerInput = getRandomNumber();
-        let i = true;
 
-        while (i = true)
+        if (gameBoard.checkPosition(computerInput) == true)
             {
-                if (gameBoard.checkPosition(computerInput) == true)
-                    {
-                        computerInput = getRandomNumber();
-                    }
-                else
-                    {
-                        return computerInput;
-                    }
+                return true;
+            }
+        else
+            {
+                switch (computerInput)
+                {
+                    case 0:
+                        gameBoard.placePieceInArray(player.getPlayer2Marker(), 0);
+                        return false;
+                    case 1:
+                        gameBoard.placePieceInArray(player.getPlayer2Marker(), 1);
+                        return false;
+                    case 2:
+                        gameBoard.placePieceInArray(player.getPlayer2Marker(), 2);
+                        return false;
+                    case 3:
+                        gameBoard.placePieceInArray(player.getPlayer2Marker(), 3);
+                        return false;
+                    case 4:
+                        gameBoard.placePieceInArray(player.getPlayer2Marker(), 4);
+                        return false;
+                    case 5:
+                        gameBoard.placePieceInArray(player.getPlayer2Marker(), 5);
+                        return false;
+                    case 6:
+                        gameBoard.placePieceInArray(player.getPlayer2Marker(), 6);
+                        return false;
+                    case 7:
+                        gameBoard.placePieceInArray(player.getPlayer2Marker(), 7);
+                        return false;
+                    case 8:
+                        gameBoard.placePieceInArray(player.getPlayer2Marker(), 8);
+                        return false;
+                    default:
+                        console.log("something went wrong with computer input");
+                        return false;
+                }
             }
     }
-
+        
     function winCondition() {
         if ((gameBoard.getPosition(0) == gameBoard.getPosition(1) && gameBoard.getPosition(0) == gameBoard.getPosition(2)) && gameBoard.getPosition(0) != null)
             {
@@ -368,142 +486,8 @@ var gameLogic = (function() {
             }
     }
 
-    function playerMovesFirst(button) {
-        button.addEventListener('click', () => {
-            switch (button.id) 
-            {
-                case 'top-left':
-                    getUserInput("0")
-                    break;
-                case 'top-mid':
-                    getUserInput("1");
-                    break;
-                case 'top-right':
-                    getUserInput("2");
-                    break;
-                case 'mid-left':
-                    getUserInput("3");
-                    break;
-                case 'mid-mid':
-                    getUserInput("4");
-                    break;
-                case 'mid-right':
-                    getUserInput("5");
-                    break;
-                case 'bottom-left':
-                    getUserInput("6")
-                    break;
-                case 'bottom-mid':
-                    getUserInput("7");
-                    break;
-                case 'bottom-right':
-                    getUserInput("8");
-                    break;
-                default:
-                    console.log("you clicked something that isn't a square");
-                    break;
-            }
-
-            player.getFirstToMove()
-
-            if (gameBoard.returnArrayLength() < 8)
-                {
-                    switch(getComputerInput())
-                    {
-                        case 0:
-                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 0);
-                            break;
-                        case 1: 
-                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 1);
-                            break;
-                        case 2: 
-                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 2);
-                            break;
-                        case 3: 
-                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 3);
-                            break;
-                        case 4: 
-                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 4);
-                            break;
-                        case 5: 
-                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 5);
-                            break;
-                        case 6: 
-                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 6);
-                            break;
-                        case 7: 
-                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 7);
-                            break;
-                        case 8: 
-                            gameBoard.placePieceInArray(player.getPlayer2Marker(), 8);
-                            break;
-                        default:
-                            console.log("the computer got a number outside of 0-8");
-                            break;
-                    }
-                }
-
-            if (winCondition() == 'player1')
-                {
-                    gameBoard.setPlayerScore();
-
-                    gameBoard.printDom();
-                    
-                    markerSquares.forEach((button) => {
-                        button.disabled = true;
-                    });
-
-                    setTimeout(function() {
-                        alert("Player 1 wins!");
-                    }, 200);                    
-                }
-            else if (winCondition() == 'player2')
-                {
-                    gameBoard.setComputerScore();
-
-                    gameBoard.printDom();
-                    
-                    markerSquares.forEach((button) => {
-                        button.disabled = true;
-                    });
-
-                    setTimeout(function() {
-                        alert("Player 2 wins!");
-                    }, 200);
-
-                }
-            else if (gameBoard.returnArrayLength() == 9)
-                {
-                    gameBoard.printDom();
-
-                    markerSquares.forEach((button) => {
-                        button.disabled = true;
-                    });
-
-                    setTimeout(function() {
-                        alert("It's a tie!");
-                    }, 200);
-                }
-            else
-                {
-                    gameBoard.printDom();
-                }
-        });
-    }
-
-    function playGame(button) {
-        console.log(player.getFirstToMove());
-        if (player.getFirstToMove() == "player1")
-            {
-                playerMovesFirst(button);
-            }
-        else 
-            {
-                console.log("cpu");
-            }
-    } 
-
     return {
-        playGame: playGame
+        resetGame: resetGame,
+        startGame: startGame
     }
 })();

@@ -35,6 +35,8 @@ var player = (function() {
             {
                 dialogFirstMove = radioFirstMove.value;
             }  
+
+        gameBoard.printDom();
     }
 
     function closeDialog() {
@@ -70,10 +72,20 @@ var player = (function() {
             }
     }
 
+    function getPlayerName() {
+        return dialogPlayer1Name.value;
+    }
+
+    function getCpuName() {
+        return dialogPlayer2Name.value;
+    }
+
     return {
         getPlayer1Marker: getPlayer1Marker,
         getPlayer2Marker: getPlayer2Marker,
-        getFirstToMove: getFirstToMove
+        getFirstToMove: getFirstToMove,
+        getPlayerName: getPlayerName,
+        getCpuName: getCpuName
     }
 })();
 
@@ -88,6 +100,8 @@ var gameBoard = (function() {
 
     let scorePlayerMenu = document.querySelector('.p1-score > p');
     let scoreComputerMenu = document.querySelector('.p2-score > p');
+    let playerName = document.querySelector('#p1');
+    let cpuName = document.querySelector('#p2');
 
     startButton.addEventListener('click', startGame);
     resetButton.addEventListener('click', resetGame);
@@ -181,6 +195,9 @@ var gameBoard = (function() {
                         
                 scoreComputerMenu.textContent = scoreComputerMenu.textContent + "i";
             }
+
+        playerName.textContent = player.getPlayerName();
+        cpuName.textContent = player.getCpuName();
     }
 
     function getPosition (position) {
